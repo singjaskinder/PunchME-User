@@ -5,9 +5,10 @@ import 'package:otp_text_field/otp_text_field.dart';
 import 'package:punchme/common/header.dart';
 import 'package:punchme/common/sizedbox.dart';
 import 'package:punchme/common/text.dart';
-import 'package:punchme/core/size_config.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
+
+import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
 
 import 'phone_ctrller.dart';
 
@@ -19,8 +20,8 @@ class OTP extends StatelessWidget {
     final PhoneCtrller ctrller = Get.find();
     return WillPopScope(
         onWillPop: () async {
-          // ctrller.cancelTimer();
-          return false;
+          ctrller.cancelTimer();
+          return true;
         },
         child: Scaffold(
           backgroundColor: AppColors.darkerGrey,
@@ -42,8 +43,12 @@ class OTP extends StatelessWidget {
                     SizedBox(
                       height: SizeConfig.width * 2,
                     ),
-                    JxText('OTP has been sent to number:\n${ctrller.phoneNo}',
-                        size: 4, isBold: true),
+                    JxText(
+                      'OTP has been sent to number:\n${ctrller.phoneNo}',
+                      size: 4,
+                      isBold: true,
+                      maxLines: 2,
+                    ),
                     SizedBox(
                       height: SizeConfig.width * 8,
                     ),

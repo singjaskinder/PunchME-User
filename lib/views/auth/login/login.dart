@@ -5,10 +5,11 @@ import 'package:punchme/common/header.dart';
 import 'package:punchme/common/sizedbox.dart';
 import 'package:punchme/common/social_connect.dart';
 import 'package:punchme/common/text.dart';
-import 'package:punchme/core/size_config.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
 import 'package:punchme/views/auth/login/login_ctrller.dart';
+
+import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
 
 class Login extends StatelessWidget {
   @override

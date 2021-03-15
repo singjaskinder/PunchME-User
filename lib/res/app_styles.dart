@@ -19,16 +19,22 @@ class AppStyles {
       decoration: TextDecoration.none);
 
   static final generalTxtField = InputDecoration(
-    contentPadding: EdgeInsets.zero,
+    contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+    errorStyle: TextStyle(fontSize: 0.1),
     focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.black, width: 2),
+        borderSide: BorderSide(color: AppColors.yellow, width: 2),
         borderRadius: BorderRadius.all(Radius.circular(8))),
     border: OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.black, width: 2),
+        borderSide: BorderSide(color: AppColors.yellow, width: 2),
         borderRadius: BorderRadius.all(Radius.circular(8))),
   );
   static final minimalBorderRadius = BorderRadius.all(Radius.circular(10));
 
   static final minimalBorder =
       RoundedRectangleBorder(borderRadius: minimalBorderRadius);
+
+  static final splashYellow = AppColors.yellow.withOpacity(0.1);
+
+  static final splashBlue = AppColors.blue.withOpacity(0.05);
+  static final hoverBlue = AppColors.blue.withOpacity(0.2);
 }

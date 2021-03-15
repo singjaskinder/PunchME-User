@@ -2,11 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:punchme/core/size_config.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
 import 'package:punchme/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
 
 class Landing extends StatefulWidget {
   static const id = 'landing';
@@ -25,16 +26,18 @@ class _LandingState extends State<Landing> {
 
   void checkUser() async {
     User user = FirebaseAuth.instance.currentUser;
-
+    // final saved = await SharedPreferences.getInstance();
+    // saved.clear();
+    // user = null;
     Future.delayed(Duration(seconds: 1), () async {
       if (user == null) {
         Get.offAndToNamed(Routes.register);
       } else {
         final saved = await SharedPreferences.getInstance();
         if (saved.get('phone') != null) {
-          Get.offAndToNamed(Routes.phone);
-        } else {
           Get.offAndToNamed(Routes.pager);
+        } else {
+          Get.offAndToNamed(Routes.phone);
         }
       }
     });

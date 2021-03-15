@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -24,7 +25,6 @@ class PhoneCtrller extends GetxController {
   void checkPhoneNo() {
     if (formKey.currentState.validate()) {
       phoneNo = dropdownValue.value + ' ' + phoneCtrl.text;
-      print('assssssssafaweff');
       print(phoneNo);
       Get.toNamed(Routes.otp);
       sendOTPCode();
@@ -35,14 +35,16 @@ class PhoneCtrller extends GetxController {
     final PhoneVerificationCompleted verificationCompleted =
         (AuthCredential phoneAuthCredential) async {
       try {
+        JxSnackBarLoading(true);
         await auth.currentUser.linkWithCredential(phoneAuthCredential);
         await updatePhone();
+        JxSnackBarLoading(false);
         Get.offAllNamed(Routes.pager);
       } catch (e) {
         String error;
         cancelTimer();
         if (e.toString().contains('User has already been linked')) {
-          error = 'Phone number already registerd';
+          error = 'Phone number already in use';
           Future.delayed(Duration(seconds: 2), () {
             Get.back(closeOverlays: true);
           });
@@ -65,7 +67,6 @@ class PhoneCtrller extends GetxController {
 
     final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
         (String verificationId) {
-      JxSnackBarStatus(null, 'OTP time out');
       cancelTimer();
     };
 
@@ -80,16 +81,18 @@ class PhoneCtrller extends GetxController {
 
   void submitOTP(String otp) async {
     try {
+      JxSnackBarLoading(true);
       AuthCredential _authCredential =
           PhoneAuthProvider.credential(verificationId: verId, smsCode: otp);
       await auth.currentUser.linkWithCredential(_authCredential);
       await updatePhone();
+      JxSnackBarLoading(false);
       Get.offAllNamed(Routes.pager);
     } catch (e) {
       String error;
       cancelTimer();
       if (e.toString().contains('User has already been linked')) {
-        error = 'Phone number already registerd';
+        error = 'Phone number already in use';
         Future.delayed(Duration(seconds: 2), () {
           Get.back(closeOverlays: true);
         });
@@ -116,6 +119,7 @@ class PhoneCtrller extends GetxController {
   }
 
   Future<void> updatePhone() async {
+    cancelTimer();
     final data = {'name': nameCtrl.text, 'phone': phoneNo};
     await authRepo.updateUserDetails(data);
     final saver = await SharedPreferences.getInstance();

@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:punchme/common/text.dart';
-import 'package:punchme/core/size_config.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
+
+import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
 
 import 'account_ctrller.dart';
 

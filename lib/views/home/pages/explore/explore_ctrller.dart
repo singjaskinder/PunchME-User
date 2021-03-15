@@ -17,7 +17,7 @@ class ExploreCtrller extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    rootBundle.loadString('assets/maps/map_style.txt').then((string) {
+    rootBundle.loadString('maps/map_style.txt').then((string) {
       mapStyle = string;
     });
   }

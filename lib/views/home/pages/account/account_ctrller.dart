@@ -4,8 +4,7 @@ import 'package:get/state_manager.dart';
 
 class AccountCtrller extends GetxController {
   final List<Menu> menus = [
-    Menu(name: 'Punch History', icon: Icons.history),
-    Menu(name: 'Points History', icon: Icons.history),
+    Menu(name: 'My History', icon: Icons.history),
     Menu(name: 'My Redeemed', icon: Icons.ac_unit),
     Menu(name: 'Help & Support', icon: Icons.help_outline),
     Menu(name: 'About', icon: Icons.change_history),
