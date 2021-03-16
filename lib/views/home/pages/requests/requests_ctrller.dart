@@ -2,17 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:punchme/apis/requests.dart';
-import 'package:punchme/common/sizedbox.dart';
-import 'package:punchme/common/snapshot_status.dart';
-import 'package:punchme/common/text.dart';
 import 'package:punchme/models/requests_m.dart';
-import 'package:punchme/models/service_history_m.dart';
-import 'package:punchme/res/app_colors.dart';
+import 'package:punchme/overlays/progress_dialog.dart';
 import 'package:punchme/utils/infos.dart';
+import 'package:punchme/views/home/pages/requests/points_dialog.dart';
+import 'package:punchme/views/home/pages/requests/punch_dialog.dart';
 
 class RequestsController extends GetxController {
   RequestsRepo requestsRepo = RequestsApis();
-  RequestM requestM;
+  RequestM requestM = RequestM();
+
+  @override
+  onInit() {
+    super.onInit();
+    requestM.punch = true;
+  }
 
   String requestStatus(RequestM requestM) {
     if (requestM.status == null) {
@@ -22,6 +26,28 @@ class RequestsController extends GetxController {
       return 'Accepted';
     } else {
       return 'Rejected';
+    }
+  }
+
+  void doRedeem() async {
+    try {
+      isLoading(true);
+      dynamic serviceHistoryM;
+      if (requestM.punch) {
+        serviceHistoryM = {'times': FieldValue.increment(1), 'lapse': []};
+      } else {
+        serviceHistoryM = {
+          'times': FieldValue.increment(1),
+          'lapse': [],
+          'total': 0
+        };
+      }
+
+      await requestsRepo.redeem(requestM, serviceHistoryM);
+      Get.back();
+      isLoading(false);
+    } catch (e) {
+      isLoading(false);
     }
   }
 
@@ -37,11 +63,8 @@ class RequestsController extends GetxController {
     if (requestM.status != null) {
       if (requestM.status) {
         this.requestM = requestM;
-        Future.delayed(Duration(seconds: 1), () async {
-          Get.dialog(PunchDialog(), barrierDismissible: true);
-          Future.delayed(Duration(seconds: 4), () async {
-            Get.back();
-          });
+        Future.delayed(Duration(milliseconds: 5), () async {
+          Get.dialog(AfterScannedDialog(), barrierDismissible: false);
         });
       }
     }
@@ -50,70 +73,11 @@ class RequestsController extends GetxController {
   }
 }
 
-class PunchDialog extends StatelessWidget {
+class AfterScannedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RequestsController controller = Get.find();
-    return Scaffold(
-      backgroundColor: AppColors.transparent,
-      body: Center(
-        child: Container(
-          color: AppColors.darkGrey,
-          padding: const EdgeInsets.all(10.0),
-          child: StreamBuilder(
-            stream: controller.getServiceDetails(),
-            builder: (_, snap) {
-              if (snap.hasData) {
-                final serviceHistoryM =
-                    ServiceHistoryM.fromJson(snap.data.data());
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    JxText(
-                      'Punched!',
-                      size: 8,
-                      isBold: true,
-                      color: AppColors.yellow,
-                    ),
-                    JxSizedBox(
-                      height: 4,
-                    ),
-                    controller.requestM.punch
-                        ? (controller.requestM.doIt -
-                                    serviceHistoryM.lapse.length) ==
-                                0
-                            ? JxText(
-                                (controller.requestM.doIt -
-                                            serviceHistoryM.lapse.length)
-                                        .toString() +
-                                    ' Remaining',
-                                size: 5,
-                                isBold: true,
-                              )
-                            : JxText(
-                                'Punch Completed!\nYou get Free!',
-                                size: 5,
-                                isBold: true,
-                              )
-                        : JxText(
-                            (controller.requestM.doIt).toString() +
-                                ' Points collected',
-                            size: 5,
-                            isBold: true,
-                          )
-                  ],
-                );
-              } else if (snap.hasError) {
-                return SnapshotError();
-              } else {
-                return SnapshotLoading();
-              }
-            },
-          ),
-        ),
-      ),
-    );
+    return controller.requestM.punch ? PunchDialog() : PointsDialog();
   }
 }
 

@@ -45,8 +45,9 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
     - maps/
+
+    - assets/images/
 
   fonts:
     - family: MavenPro

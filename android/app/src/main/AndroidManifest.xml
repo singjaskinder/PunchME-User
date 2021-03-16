@@ -15,7 +15,7 @@
         android:label="Punch me"
         android:icon="@mipmap/ic_launcher">
        <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyAnxhIk61GkzMFEON9FZ-1ifJVAh2_9PCM"/>
+           android:value="AIzaSyAiEdYxWBMf4wi_pSBNwMQ1NkoNKCjPJ9o"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

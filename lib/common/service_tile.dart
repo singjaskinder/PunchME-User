@@ -90,21 +90,24 @@ class _ServiceState extends State<ServiceTile>
                             isBold: true,
                           ),
                           SizedBox(height: 2),
-                          Row(
-                            children: [
-                              Text(serviceM.punch ? 'Punch ' : 'Collect ',
-                                  style: AppStyles.idleTxt),
-                              Text(serviceM.doIt.toString(),
-                                  style: AppStyles.idleTxt),
-                              Text(
-                                  serviceM.punch
-                                      ? ' and get '
-                                      : ' points and get ',
-                                  style: AppStyles.idleTxt),
-                              Text(serviceM.getIt.toString(),
-                                  style: AppStyles.idleTxt),
-                              Text(' for free ', style: AppStyles.idleTxt),
-                            ],
+                          Visibility(
+                            visible: false,
+                            child: Row(
+                              children: [
+                                Text(serviceM.punch ? 'Punch ' : 'Collect ',
+                                    style: AppStyles.idleTxt),
+                                Text(serviceM.doIt.toString(),
+                                    style: AppStyles.idleTxt),
+                                Text(
+                                    serviceM.punch
+                                        ? ' and get '
+                                        : ' points and get ',
+                                    style: AppStyles.idleTxt),
+                                Text(serviceM.getIt.toString(),
+                                    style: AppStyles.idleTxt),
+                                Text(' for free ', style: AppStyles.idleTxt),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -143,28 +146,41 @@ class _ServiceState extends State<ServiceTile>
                           Expanded(child: PriceBox(serviceM)),
                           Expanded(
                               child: DoItBox(
-                            serviceM.doIt,
+                            serviceM,
                           )),
                           Expanded(child: GetItBox(serviceM)),
                         ],
                       ),
                       JxSizedBox(),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                          decoration: BoxDecoration(
-                              color: AppColors.yellow,
-                              borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(10))),
-                          child: JxText(
-                            serviceM.punch ? 'Punch' : 'Points',
-                            size: 3,
-                            isBold: true,
-                            color: AppColors.black,
+                      Row(
+                        children: [
+                          Visibility(
+                            visible: !serviceM.punch,
+                            child: Container(
+                              padding: EdgeInsets.all(2),
+                              child: JxText(
+                                'Per scan ${serviceM.limit} points will be collected',
+                                size: 3,
+                                color: AppColors.white,
+                              ),
+                            ),
                           ),
-                        ),
+                          Spacer(),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 8),
+                            decoration: BoxDecoration(
+                                color: AppColors.yellow,
+                                borderRadius: BorderRadius.horizontal(
+                                    left: Radius.circular(10))),
+                            child: JxText(
+                              serviceM.punch ? 'Punch' : 'Points',
+                              size: 3,
+                              isBold: true,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
                       ),
                       JxSizedBox(),
                       Align(
@@ -221,8 +237,8 @@ class PriceBox extends StatelessWidget {
 }
 
 class DoItBox extends StatelessWidget {
-  DoItBox(this.doIt);
-  final int doIt;
+  DoItBox(this.serviceM);
+  final ServiceM serviceM;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -236,7 +252,7 @@ class DoItBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           JxText(
-            'Scan:',
+            serviceM.punch ? 'Scan:' : 'Collect:',
             maxLines: 5,
             size: 3.5,
           ),
@@ -244,7 +260,7 @@ class DoItBox extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               JxText(
-                doIt.toString(),
+                serviceM.doIt.toString(),
                 maxLines: 5,
                 size: 7.5,
                 isBold: true,
@@ -253,7 +269,7 @@ class DoItBox extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 3, bottom: 3),
                 child: JxText(
-                  'times',
+                  serviceM.punch ? 'times' : 'points',
                   size: 3,
                 ),
               ),
@@ -298,7 +314,7 @@ class GetItBox extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 3, bottom: 3),
                 child: JxText(
-                  serviceM.punch ? 'times' : 'points',
+                  'free',
                   size: 3,
                 ),
               ),

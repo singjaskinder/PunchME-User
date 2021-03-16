@@ -32,7 +32,7 @@ class AuthApis extends AuthRepo {
 
   @override
   Future<void> createUserDetails(UserM userM) async {
-    await userStore.doc(userM.id).set(userM.toJson());
+    await userStore.doc(userM.id).set(userM.toJson(), SetOptions(merge: true));
   }
 
   @override

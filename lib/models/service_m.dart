@@ -8,6 +8,7 @@ class ServiceM {
   List<String> images;
   int doIt;
   int getIt;
+  int limit;
   double price;
   bool punch;
   Object location;
@@ -25,6 +26,7 @@ class ServiceM {
       this.images,
       this.doIt,
       this.getIt,
+      this.limit,
       this.price,
       this.punch,
       this.location,
@@ -42,6 +44,7 @@ class ServiceM {
     images = json['images'].cast<String>();
     doIt = json['do_it'];
     getIt = json['get_it'];
+    limit = json['limit'];
     price = json['price'].toDouble();
     punch = json['punch'];
     location = json['location']['geopoint'];
@@ -61,6 +64,7 @@ class ServiceM {
     data['images'] = this.images;
     data['do_it'] = this.doIt;
     data['get_it'] = this.getIt;
+    data['limit'] = this.limit;
     data['price'] = this.price;
     data['punch'] = this.punch;
     data['location'] = this.location;

@@ -4,6 +4,7 @@ import 'package:punchme/models/requests_m.dart';
 
 abstract class RequestsRepo {
   Future<void> create(RequestM requestM);
+  Future<void> redeem(RequestM requestM, Map<String, dynamic> data);
   Stream<DocumentSnapshot> getServiceDetails(String sid);
   Stream<QuerySnapshot> get();
 }
@@ -16,6 +17,14 @@ class RequestsApis extends RequestsRepo {
   Future<void> create(RequestM requestM) async {
     requestM.id = requestsStore.doc().id;
     await requestsStore.doc(requestM.id).set(requestM.toJson());
+  }
+
+  Future<void> redeem(RequestM requestM, Map<String, dynamic> data) async {
+    await servicesStore
+        .doc(requestM.sid)
+        .collection('user_data')
+        .doc(requestM.uid)
+        .update(data);
   }
 
   Stream<DocumentSnapshot> getServiceDetails(String sid) async* {
