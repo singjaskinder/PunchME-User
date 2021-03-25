@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:punchme/models/requests_m.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/utils/date_time.dart';
-import 'package:punchme/views/home/pages/requests/requests_ctrller.dart';
+import 'package:punchme/views/home/pages/requests/requests_controller.dart';
 
 import 'marker.dart';
 import 'text.dart';

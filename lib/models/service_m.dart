@@ -13,6 +13,7 @@ class ServiceM {
   bool punch;
   Object location;
   bool status;
+  bool isService;
   String banFor;
   String storeName;
 
@@ -30,6 +31,7 @@ class ServiceM {
       this.price,
       this.punch,
       this.location,
+      this.isService,
       this.status,
       this.banFor,
       this.storeName});
@@ -48,6 +50,7 @@ class ServiceM {
     price = json['price'].toDouble();
     punch = json['punch'];
     location = json['location']['geopoint'];
+    isService = json['is_service'];
     status = json['status'];
     banFor = json['ban_for'];
     storeName = json['owner_name'];
@@ -68,6 +71,7 @@ class ServiceM {
     data['price'] = this.price;
     data['punch'] = this.punch;
     data['location'] = this.location;
+    data['is_service'] = this.isService;
     data['status'] = this.status;
     data['ban_for'] = this.banFor;
     data['owner_name'] = this.storeName;

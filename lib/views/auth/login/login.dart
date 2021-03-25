@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:punchme/common/buttons.dart';
 import 'package:punchme/common/header.dart';
@@ -7,15 +8,13 @@ import 'package:punchme/common/social_connect.dart';
 import 'package:punchme/common/text.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
-import 'package:punchme/views/auth/login/login_ctrller.dart';
-
-import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
+import 'package:punchme/utils/size_config.dart';
+import 'package:punchme/views/auth/login/login_controller.dart';
 
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ctrller = Get.put(LoginCtrller());
-
+    final controller = Get.put(LoginController());
     return Scaffold(
       backgroundColor: AppColors.darkerGrey,
       body: SafeArea(
@@ -26,22 +25,22 @@ class Login extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(SizeConfig.width * 5),
             child: Form(
-              key: ctrller.formKey,
+              key: controller.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: SizeConfig.height * 16,
+                    height: SizeConfig.height * 18,
                   ),
-                  JxText('LOGIN',
-                      size: 7, color: AppColors.yellow, isBold: true),
+                  JxText('Login',
+                      size: 8, color: AppColors.yellow, isBold: true),
                   SizedBox(
                     height: SizeConfig.width,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: TextFormField(
-                        controller: ctrller.emailCtrl,
+                        controller: controller.emailCtrl,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
@@ -53,22 +52,30 @@ class Login extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: TextFormField(
-                        controller: ctrller.passwordCtrl,
-                        obscureText: true,
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-                            labelText: 'Enter Password',
-                            prefixIcon: Icon(Icons.lock)),
-                        validator: (val) => val.length >= 6
-                            ? null
-                            : 'Password should contain atleast 6 characters'),
+                    child: Obx(
+                      () => TextFormField(
+                          controller: controller.passwordCtrl,
+                          obscureText: !controller.showPassword.value,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.zero,
+                              labelText: 'Enter Password',
+                              prefixIcon: Icon(Icons.lock),
+                              suffixIcon: GestureDetector(
+                                onTap: () => controller.togglePassword(),
+                                child: Icon(controller.showPassword.value
+                                    ? FontAwesomeIcons.eye
+                                    : FontAwesomeIcons.eyeSlash),
+                              )),
+                          validator: (val) => val.length >= 6
+                              ? null
+                              : 'Password should contain atleast 6 characters'),
+                    ),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: MaterialButton(
-                        onPressed: () => ctrller.toForgotPassword(),
+                        onPressed: () => controller.toForgotPassword(),
                         shape: AppStyles.minimalBorder,
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -89,7 +96,7 @@ class Login extends StatelessWidget {
                             size: 4.5,
                           ),
                           GestureDetector(
-                            onTap: () => ctrller.toRegister(),
+                            onTap: () => controller.toRegister(),
                             child: JxText(
                               'Register here,',
                               size: 4,
@@ -102,8 +109,8 @@ class Login extends StatelessWidget {
                     Expanded(
                       child: Obx(
                         () => TextIconBTN(
-                          enabled: !ctrller.isLoading.value,
-                          onPressed: () => ctrller.login(),
+                          enabled: !controller.isLoading.value,
+                          onPressed: () => controller.login(),
                           label: 'Login',
                           icondata: Icons.navigate_next,
                         ),
@@ -123,8 +130,8 @@ class Login extends StatelessWidget {
                     height: SizeConfig.width * 4,
                   ),
                   SocialConnect(
-                    onGoogleTap: () => ctrller.googlelogin(),
-                    onFacebookTap: () => ctrller.faceboooklogin(),
+                    onGoogleTap: () => controller.googlelogin(),
+                    onFacebookTap: () => controller.faceboooklogin(),
                   ),
                 ],
               ),

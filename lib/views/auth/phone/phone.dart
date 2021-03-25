@@ -5,17 +5,16 @@ import 'package:punchme/common/buttons.dart';
 import 'package:punchme/common/header.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
+import 'package:punchme/utils/size_config.dart';
 
-import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
-
-import 'phone_ctrller.dart';
+import 'phone_controller.dart';
 
 class Phone extends StatelessWidget {
   const Phone({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final ctrller = Get.put(PhoneCtrller());
+    final controller = Get.put(PhoneController());
     return WillPopScope(
         onWillPop: () async {
           return false;
@@ -30,7 +29,7 @@ class Phone extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(SizeConfig.width * 5),
                 child: Form(
-                  key: ctrller.formKey,
+                  key: controller.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -48,7 +47,7 @@ class Phone extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8),
                         child: TextFormField(
-                            controller: ctrller.nameCtrl,
+                            controller: controller.nameCtrl,
                             keyboardType: TextInputType.name,
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
@@ -79,14 +78,14 @@ class Phone extends StatelessWidget {
                                 child: Center(
                                   child: Obx(
                                     () => DropdownButton(
-                                        value: ctrller.dropdownValue.value,
+                                        value: controller.dropdownValue.value,
                                         isExpanded: true,
                                         underline: SizedBox(),
                                         icon: Icon(
                                           Icons.keyboard_arrow_down,
                                           color: Colors.grey.withOpacity(0.6),
                                         ),
-                                        items: ctrller.phoneCodes
+                                        items: controller.phoneCodes
                                             .map<DropdownMenuItem<String>>(
                                                 (String value) {
                                           return DropdownMenuItem<String>(
@@ -94,14 +93,14 @@ class Phone extends StatelessWidget {
                                             child: Text(value),
                                           );
                                         }).toList(),
-                                        onChanged: (val) =>
-                                            ctrller.dropdownValue.value = val),
+                                        onChanged: (val) => controller
+                                            .dropdownValue.value = val),
                                   ),
                                 ),
                               ),
                               Flexible(
                                 child: TextFormField(
-                                    controller: ctrller.phoneCtrl,
+                                    controller: controller.phoneCtrl,
                                     keyboardType: TextInputType.number,
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
@@ -120,7 +119,7 @@ class Phone extends StatelessWidget {
                       ),
                       TextIconBTN(
                         enabled: true,
-                        onPressed: () => ctrller.checkPhoneNo(),
+                        onPressed: () => controller.checkPhoneNo(),
                         label: 'Send OTP',
                         icondata: Icons.navigate_next,
                       ),

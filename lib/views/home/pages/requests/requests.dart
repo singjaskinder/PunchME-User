@@ -6,7 +6,7 @@ import 'package:punchme/common/snapshot_status.dart';
 import 'package:punchme/models/requests_m.dart';
 import 'package:punchme/res/app_colors.dart';
 
-import 'requests_ctrller.dart';
+import 'requests_controller.dart';
 
 class Requests extends StatelessWidget {
   const Requests({Key key}) : super(key: key);
@@ -22,6 +22,7 @@ class Requests extends StatelessWidget {
           builder: (_, snap) {
             if (snap.hasData) {
               if (snap.data.docs.isEmpty) {
+                Get.back();
                 return SnapshotEmpty('No Request at moment');
               }
               return ListView.separated(

@@ -8,14 +8,16 @@ import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
 import 'package:punchme/utils/currency.dart';
 import 'package:punchme/utils/size_config.dart';
-import 'package:punchme/views/home/pages/offers/offer_ctrller.dart';
+import 'package:punchme/views/home/pages/offers/offer_controller.dart';
 
 import 'sizedbox.dart';
 import 'text.dart';
 
 class ServiceTile extends StatefulWidget {
-  ServiceTile(this.serviceM, {Key key}) : super(key: key);
+  ServiceTile(this.serviceM, {@required this.toApply, Key key})
+      : super(key: key);
   final ServiceM serviceM;
+  final bool toApply;
 
   @override
   _ServiceState createState() => _ServiceState();
@@ -46,11 +48,16 @@ class _ServiceState extends State<ServiceTile>
     super.dispose();
   }
 
+  String offerInfo(ServiceM serviceM) {
+    return '${serviceM.punch ? 'Punch' : 'Collect'} ${serviceM.doIt} ${serviceM.punch ? 'and get' : 'points and get'},\n${serviceM.getIt} for free ';
+  }
+
   @override
   Widget build(BuildContext context) {
     animation = Tween(begin: -20.0, end: 40.0).animate(_controller);
     final serviceM = widget.serviceM;
-    final OfferCtrller controller = Get.find();
+    final toApply = widget.toApply;
+    final OfferController controller = Get.find();
     return Material(
       color: AppColors.black,
       child: InkWell(
@@ -90,24 +97,10 @@ class _ServiceState extends State<ServiceTile>
                             isBold: true,
                           ),
                           SizedBox(height: 2),
-                          Visibility(
-                            visible: false,
-                            child: Row(
-                              children: [
-                                Text(serviceM.punch ? 'Punch ' : 'Collect ',
-                                    style: AppStyles.idleTxt),
-                                Text(serviceM.doIt.toString(),
-                                    style: AppStyles.idleTxt),
-                                Text(
-                                    serviceM.punch
-                                        ? ' and get '
-                                        : ' points and get ',
-                                    style: AppStyles.idleTxt),
-                                Text(serviceM.getIt.toString(),
-                                    style: AppStyles.idleTxt),
-                                Text(' for free ', style: AppStyles.idleTxt),
-                              ],
-                            ),
+                          JxText(
+                            offerInfo(serviceM),
+                            maxLines: 2,
+                            size: 3.8,
                           ),
                         ],
                       ),
@@ -159,7 +152,7 @@ class _ServiceState extends State<ServiceTile>
                             child: Container(
                               padding: EdgeInsets.all(2),
                               child: JxText(
-                                'Per scan ${serviceM.limit} points will be collected',
+                                'Per scan 1 point will be collected',
                                 size: 3,
                                 color: AppColors.white,
                               ),
@@ -183,15 +176,19 @@ class _ServiceState extends State<ServiceTile>
                         ],
                       ),
                       JxSizedBox(),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          width: SizeConfig.width * 50,
-                          child: TextIconBTN(
-                              onPressed: () => controller.toScanQR(serviceM),
-                              label: 'Get now',
-                              icondata: FontAwesomeIcons.qrcode,
-                              enabled: true),
+                      Visibility(
+                        visible: toApply,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            width: SizeConfig.width * 50,
+                            child: TextIconBTN(
+                                onPressed: () =>
+                                    controller.createRequest(serviceM),
+                                label: 'Get offer',
+                                icondata: Icons.navigate_next,
+                                enabled: true),
+                          ),
                         ),
                       )
                     ],

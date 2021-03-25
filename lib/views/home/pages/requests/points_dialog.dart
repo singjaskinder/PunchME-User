@@ -9,7 +9,7 @@ import 'package:punchme/models/service_history_m.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/utils/size_config.dart';
 
-import 'requests_ctrller.dart';
+import 'requests_controller.dart';
 
 class PointsDialog extends StatelessWidget {
   @override

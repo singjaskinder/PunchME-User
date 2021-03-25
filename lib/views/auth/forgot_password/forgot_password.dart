@@ -5,15 +5,14 @@ import 'package:punchme/common/header.dart';
 import 'package:punchme/common/sizedbox.dart';
 import 'package:punchme/common/text.dart';
 import 'package:punchme/res/app_colors.dart';
+import 'package:punchme/utils/size_config.dart';
 
-import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
-
-import 'forgot_password_ctrller.dart';
+import 'forgot_password_controller.dart';
 
 class ForgotPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ctrller = Get.put(ForgotPasswordCtrller());
+    final controller = Get.put(ForgotPasswordController());
     return Scaffold(
       backgroundColor: AppColors.darkerGrey,
       body: SafeArea(
@@ -27,17 +26,17 @@ class ForgotPassword extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: SizeConfig.height * 20,
+                  height: SizeConfig.height * 18,
                 ),
                 JxText('Forgot Password',
-                    size: 6, color: AppColors.yellow, isBold: true),
+                    size: 7, color: AppColors.yellow, isBold: true),
                 JxSizedBox(),
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Form(
-                    key: ctrller.formKey,
+                    key: controller.formKey,
                     child: TextFormField(
-                        controller: ctrller.emailCtrl,
+                        controller: controller.emailCtrl,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
@@ -51,8 +50,8 @@ class ForgotPassword extends StatelessWidget {
                 JxSizedBox(height: 2),
                 Obx(
                   () => TextIconBTN(
-                    enabled: !ctrller.isLoading.value,
-                    onPressed: () => ctrller.sendPasswordResetLink(),
+                    enabled: !controller.isLoading.value,
+                    onPressed: () => controller.sendPasswordResetLink(),
                     label: 'Submit',
                     icondata: Icons.navigate_next,
                   ),

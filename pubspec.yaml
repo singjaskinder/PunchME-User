@@ -22,12 +22,15 @@ dependencies:
   cloud_firestore:
   firebase_auth:
   firebase_core: 
-  firebase_messaging: 
-  file_picker:
+  firebase_messaging:
+  firebase_storage: 7.0.0
+  image_picker: ^0.6.6+5
   image_cropper:
+  meet_network_image:
   location:
   google_maps_flutter:
   geoflutterfire:
+  geocoding:  
   qr_code_scanner:
   shimmer:
   share:

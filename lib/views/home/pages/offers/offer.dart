@@ -7,25 +7,25 @@ import 'package:punchme/common/snapshot_status.dart';
 import 'package:punchme/models/service_m.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/utils/size_config.dart';
-import 'package:punchme/views/home/pages/offers/offer_ctrller.dart';
+import 'package:punchme/views/home/pages/offers/offer_controller.dart';
 
 class Offer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final controller = Get.put(OfferCtrller());
+    final controller = Get.put(OfferController());
     return Column(
       children: [
         Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-          stream: controller.get(),
+            child: StreamBuilder<List<DocumentSnapshot>>(
+          stream: controller.getServices(),
           builder: (_, snap) {
             if (snap.hasData) {
-              if (snap.data.docs.isEmpty) {
+              if (snap.data.isEmpty) {
                 return SnapshotEmpty('No services found');
               }
               return ListView.separated(
-                  itemCount: snap.data.docs.length,
+                  itemCount: snap.data.length,
                   separatorBuilder: (_, i) {
                     return Container(
                       color: AppColors.lightGrey,
@@ -33,9 +33,8 @@ class Offer extends StatelessWidget {
                     );
                   },
                   itemBuilder: (_, i) {
-                    final serviceM =
-                        ServiceM.fromJson(snap.data.docs[i].data());
-                    return ServiceTile(serviceM);
+                    final serviceM = ServiceM.fromJson(snap.data[i].data());
+                    return ServiceTile(serviceM,toApply: false);
                   });
             } else if (snap.hasError) {
               return SnapshotError();

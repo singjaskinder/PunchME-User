@@ -1,67 +1,65 @@
-// class MyDialog {
-//   static void show(String title, String text, String btn1Label,
-//       String btn2Label, Function onPos, Function onNeg) {
-//     Get.dialog(
-//         Scaffold(
-//           backgroundColor: AppColors.transparent,
-//           body: Center(
-//             child: Container(
-//               width: SizeConfig.width * 80,
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.stretch,
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   Container(
-//                     padding: EdgeInsets.all(15),
-//                     margin: EdgeInsets.symmetric(vertical: 10),
-//                     height: SizeConfig.width * 45,
-//                     decoration: BoxDecoration(
-//                         color: AppColors.white,
-//                         borderRadius: BorderRadius.all(Radius.circular(15))),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         Text(title,
-//                             textAlign: TextAlign.center,
-//                             style: AppStyles.idleTxt.copyWith(
-//                                 fontSize: 20,
-//                                 fontWeight: FontWeight.bold,
-//                                 color: AppColors.orange)),
-//                         SizedBox(height: 10),
-//                         Text(text,
-//                             textAlign: TextAlign.center,
-//                             style: AppStyles.idleTxt.copyWith(
-//                                 fontSize: 16,
-//                                 fontWeight: FontWeight.bold,
-//                                 color: AppColors.black)),
-//                       ],
-//                     ),
-//                   ),
-//                   SizedBox(height: 18),
-//                   Container(
-//                     child: PrimaryButton(
-//                       label: btn1Label ?? 'Okay',
-//                       onPressed: onPos ?? dismiss,
-//                     ),
-//                   ),
-//                   SizedBox(height: 8),
-//                   Visibility(
-//                     visible: !(btn2Label == null),
-//                     child: Container(
-//                       child: PrimaryButton(
-//                         label: btn2Label ?? 'Cancel',
-//                         onPressed: onNeg ?? dismiss,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//         barrierDismissible: false);
-//   }
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:punchme/common/buttons.dart';
+import 'package:punchme/common/sizedbox.dart';
+import 'package:punchme/common/text.dart';
+import 'package:punchme/res/app_colors.dart';
+import 'package:punchme/utils/size_config.dart';
 
-//   static void dismiss() => Get.back();
-// }
+class JxDialog {
+  JxDialog(String title, String text, String posLabel, String negLabel,
+      Function onPos, Function onNeg) {
+    Get.dialog(
+        Scaffold(
+            backgroundColor: AppColors.transparent,
+            body: Center(
+              child: Container(
+                width: SizeConfig.width * 80,
+                padding: EdgeInsets.all(15),
+                color: AppColors.darkGrey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    JxText(title ?? 'Oops',
+                        size: 6, isBold: true, color: AppColors.yellow),
+                    JxSizedBox(),
+                    JxText(
+                      text ?? 'Something went wrong ...',
+                      size: 4,
+                      maxLines: 4,
+                    ),
+                    JxSizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Visibility(
+                            visible: negLabel != null,
+                            child: TextBTN(
+                              onPressed: () =>
+                                  onNeg == null ? Get.back() : onNeg(),
+                              enabled: true,
+                              label: negLabel ?? '',
+                              isDark: true,
+                              textSize: 4,
+                            )),
+                        JxSizedBox(),
+                        TextBTN(
+                          onPressed: () => onPos == null ? Get.back() : onPos(),
+                          enabled: true,
+                          label: posLabel ?? 'OK',
+                          isDark: true,
+                          textSize: 4,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            )),
+        barrierDismissible: false);
+  }
+}

@@ -3,16 +3,23 @@ import 'package:get/get.dart';
 import 'package:punchme/apis/auth.dart';
 import 'package:punchme/overlays/snackbar.dart';
 import 'package:punchme/routes/routes.dart';
-import 'package:punchme/views/auth/register/register_ctrller.dart';
+import 'package:punchme/views/auth/register/register_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginCtrller extends GetxController {
+class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
   AuthRepo authRepo = AuthApis();
   final isLoading = false.obs;
-  final RegisterCtrller registerCtrller = Get.find();
+  final showPassword = false.obs;
+
+  final RegisterController registerController = Get.find();
+
+   void togglePassword() {
+      showPassword.value = showPassword.value ? false : true;
+
+  }
 
   void login() async {
     if (formKey.currentState.validate()) {
@@ -56,10 +63,10 @@ class LoginCtrller extends GetxController {
   void toRegister() => Get.back();
 
   void googlelogin() async {
-    await registerCtrller.googlelogin();
+    await registerController.googlelogin();
   }
 
   void faceboooklogin() async {
-    await registerCtrller.faceboooklogin();
+    await registerController.faceboooklogin();
   }
 }

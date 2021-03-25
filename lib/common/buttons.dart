@@ -41,7 +41,8 @@ class TextIconBTN extends StatelessWidget {
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           JxText(
             label,
-            size: 5,
+            size: 5.2,
+            isBold: true,
             color: outlined ? AppColors.yellow : AppColors.darkerGrey,
           ),
           JxSizedBox(

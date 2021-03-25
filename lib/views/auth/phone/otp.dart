@@ -7,20 +7,19 @@ import 'package:punchme/common/sizedbox.dart';
 import 'package:punchme/common/text.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
+import 'package:punchme/utils/size_config.dart';
 
-import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
-
-import 'phone_ctrller.dart';
+import 'phone_controller.dart';
 
 class OTP extends StatelessWidget {
   const OTP({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final PhoneCtrller ctrller = Get.find();
+    final PhoneController controller = Get.find();
     return WillPopScope(
         onWillPop: () async {
-          ctrller.cancelTimer();
+          controller.cancelTimer();
           return true;
         },
         child: Scaffold(
@@ -44,7 +43,7 @@ class OTP extends StatelessWidget {
                       height: SizeConfig.width * 2,
                     ),
                     JxText(
-                      'OTP has been sent to number:\n${ctrller.phoneNo}',
+                      'OTP has been sent to number:\n${controller.phoneNo}',
                       size: 4,
                       isBold: true,
                       maxLines: 2,
@@ -64,7 +63,7 @@ class OTP extends StatelessWidget {
                           style: AppStyles.idleTxt.copyWith(
                               color: AppColors.yellow,
                               fontSize: SizeConfig.width * 6),
-                          onCompleted: (val) => ctrller.submitOTP(val),
+                          onCompleted: (val) => controller.submitOTP(val),
                         ),
                       ),
                     ),
@@ -74,20 +73,20 @@ class OTP extends StatelessWidget {
                     Center(
                       child: Obx(
                         () => GestureDetector(
-                          onTap: ctrller.count.value == 0
-                              ? () => ctrller.sendOTPCode()
+                          onTap: controller.count.value == 0
+                              ? () => controller.sendOTPCode()
                               : null,
                           child: Text(
-                              ctrller.count.value == 0
+                              controller.count.value == 0
                                   ? 'Resend'
-                                  : 'Resend OTP in ${ctrller.count.value}',
+                                  : 'Resend OTP in ${controller.count.value}',
                               textAlign: TextAlign.left,
                               style: AppStyles.idleTxt.copyWith(
                                   fontSize: SizeConfig.width * 4,
-                                  color: ctrller.count.value == 0
+                                  color: controller.count.value == 0
                                       ? AppColors.yellow
                                       : AppColors.white,
-                                  fontWeight: ctrller.count.value == 0
+                                  fontWeight: controller.count.value == 0
                                       ? FontWeight.bold
                                       : FontWeight.normal)),
                         ),

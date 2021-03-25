@@ -8,7 +8,7 @@ import 'package:punchme/overlays/snackbar.dart';
 import 'package:punchme/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PhoneCtrller extends GetxController {
+class PhoneController extends GetxController {
   final auth = FirebaseAuth.instance;
   final formKey = GlobalKey<FormState>();
   final nameCtrl = TextEditingController();
@@ -121,7 +121,7 @@ class PhoneCtrller extends GetxController {
   Future<void> updatePhone() async {
     cancelTimer();
     final data = {'name': nameCtrl.text, 'phone': phoneNo};
-    await authRepo.updateUserDetails(data);
+    await authRepo.updateUserDetails(data,false);
     final saver = await SharedPreferences.getInstance();
     saver.setString('name', nameCtrl.text);
     saver.setString('phone', phoneNo);

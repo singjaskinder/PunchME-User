@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:punchme/common/buttons.dart';
 import 'package:punchme/common/header.dart';
@@ -8,15 +9,14 @@ import 'package:punchme/common/social_connect.dart';
 import 'package:punchme/common/text.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
+import 'package:punchme/utils/size_config.dart';
 
-import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
-
-import 'register_ctrller.dart';
+import 'register_controller.dart';
 
 class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ctrller = Get.put(RegisterCtrller());
+    final controller = Get.put(RegisterController());
     return Scaffold(
       backgroundColor: AppColors.darkerGrey,
       body: SafeArea(
@@ -27,22 +27,22 @@ class Register extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(SizeConfig.width * 5),
             child: Form(
-              key: ctrller.formKey,
+              key: controller.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: SizeConfig.height * 16,
+                    height: SizeConfig.height * 18,
                   ),
-                  JxText('REGISTER',
-                      size: 7, color: AppColors.yellow, isBold: true),
+                  JxText('Register',
+                      size: 8, color: AppColors.yellow, isBold: true),
                   SizedBox(
                     height: SizeConfig.width,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: TextFormField(
-                        controller: ctrller.emailCtrl,
+                        controller: controller.emailCtrl,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
@@ -54,31 +54,48 @@ class Register extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: TextFormField(
-                        controller: ctrller.passwordCtrl,
-                        obscureText: true,
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-                            labelText: 'Enter Password',
-                            prefixIcon: Icon(Icons.lock)),
-                        validator: (val) => val.length >= 6
-                            ? null
-                            : 'Password should contain atleast 6 characters'),
+                    child: Obx(
+                      () => TextFormField(
+                          controller: controller.passwordCtrl,
+                          obscureText: !controller.showPassword.value,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.zero,
+                              labelText: 'Enter Password',
+                              prefixIcon: Icon(Icons.lock),
+                              suffixIcon: GestureDetector(
+                                onTap: () => controller.togglePassword(false),
+                                child: Icon(controller.showPassword.value
+                                    ? FontAwesomeIcons.eye
+                                    : FontAwesomeIcons.eyeSlash),
+                              )),
+                          validator: (val) => val.length >= 6
+                              ? null
+                              : 'Password should contain atleast 6 characters'),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: TextFormField(
-                        controller: ctrller.password2Ctrl,
-                        obscureText: true,
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-                            labelText: 'Confirm Password',
-                            prefixIcon: Icon(Icons.lock)),
-                        validator: (val) => val == ctrller.passwordCtrl.text
-                            ? null
-                            : 'Passwords doesn\'t match'),
+                    child: Obx(
+                      () => TextFormField(
+                          controller: controller.password2Ctrl,
+                          obscureText: !controller.showConfirmPassword.value,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.zero,
+                              labelText: 'Confirm Password',
+                              prefixIcon: Icon(Icons.lock),
+                              suffixIcon: GestureDetector(
+                                onTap: () => controller.togglePassword(true),
+                                child: Icon(controller.showConfirmPassword.value
+                                    ? FontAwesomeIcons.eye
+                                    : FontAwesomeIcons.eyeSlash),
+                              )),
+                          validator: (val) =>
+                              val == controller.passwordCtrl.text
+                                  ? null
+                                  : 'Passwords doesn\'t match'),
+                    ),
                   ),
                   SizedBox(
                     height: SizeConfig.width * 3,
@@ -90,7 +107,7 @@ class Register extends StatelessWidget {
                         children: [
                           JxText('Have an account?', size: 4.5),
                           GestureDetector(
-                            onTap: () => ctrller.toLogin(),
+                            onTap: () => controller.toLogin(),
                             child: JxText('Login here',
                                 color: AppColors.yellow, size: 4),
                           ),
@@ -100,8 +117,8 @@ class Register extends StatelessWidget {
                     Expanded(
                       child: Obx(
                         () => TextIconBTN(
-                          enabled: !ctrller.isLoading.value,
-                          onPressed: () => ctrller.register(),
+                          enabled: !controller.isLoading.value,
+                          onPressed: () => controller.register(),
                           label: 'Register',
                           icondata: Icons.navigate_next,
                         ),
@@ -121,8 +138,8 @@ class Register extends StatelessWidget {
                     height: SizeConfig.width * 4,
                   ),
                   SocialConnect(
-                    onGoogleTap: () => ctrller.googlelogin(),
-                    onFacebookTap: () => ctrller.faceboooklogin(),
+                    onGoogleTap: () => controller.googlelogin(),
+                    onFacebookTap: () => controller.faceboooklogin(),
                   ),
                 ],
               ),

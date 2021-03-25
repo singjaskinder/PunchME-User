@@ -5,9 +5,8 @@ import 'package:get/get.dart';
 import 'package:punchme/res/app_colors.dart';
 import 'package:punchme/res/app_styles.dart';
 import 'package:punchme/routes/routes.dart';
+import 'package:punchme/utils/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'file:///C:/work/punchme/punchme/lib/utils/size_config.dart';
 
 class Landing extends StatefulWidget {
   static const id = 'landing';

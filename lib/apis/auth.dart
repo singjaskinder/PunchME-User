@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:punchme/models/user_m.dart';
 
@@ -8,7 +9,7 @@ abstract class AuthRepo {
   Future<UserCredential> register(String email, String password);
   Future<void> createUserDetails(UserM userM);
   Future<UserM> getUserDetails();
-  Future<void> updateUserDetails(Map<String, dynamic> data);
+  Future<void> updateUserDetails(Map<String, dynamic> data,bool updateImage);
   Future<void> sendPasswordResetLink(String email);
   Future<UserCredential> googleLogin();
   Future<UserCredential> facebookLogin();
@@ -17,6 +18,8 @@ abstract class AuthRepo {
 class AuthApis extends AuthRepo {
   final auth = FirebaseAuth.instance;
   final userStore = FirebaseFirestore.instance.collection('users');
+  final storesStorage = FirebaseStorage.instance.ref().child('services');
+
 
   @override
   Future<UserCredential> login(String email, String password) async {
@@ -42,7 +45,7 @@ class AuthApis extends AuthRepo {
   }
 
   @override
-  Future<void> updateUserDetails(Map<String, dynamic> data) async {
+  Future<void> updateUserDetails(Map<String, dynamic> data,bool updateImage) async {
     await userStore.doc(auth.currentUser.uid).update(data);
   }
 
@@ -65,6 +68,29 @@ class AuthApis extends AuthRepo {
 
   @override
   Future<UserCredential> facebookLogin() async {}
+
+  @override
+  Future<void> removeImage(String imageData) async {
+     await storesStorage.de(url).then((value) {
+          value.delete();
+          store.doc(productDetails.pid).delete().then((value) {
+            dialogs.dismiss(context);
+            dialogs.notice(
+                context, 'Deleted', 'Your product has been deleted', goBack);
+          }).catchError((e) {
+            print(e);
+            dialogs.dismiss(context);
+            dialogs.error(
+                context, 'Something went wrong, try again later...', null);
+          });
+        }).catchError((e) {
+          print(e);
+          dialogs.dismiss(context);
+          dialogs.error(
+              context, 'Something went wrong, try again later...', null);
+        });
+      });
+  }
 
   //  Future<UserM> facebookSignIn() async {
   //   String result = await Navigator.push(

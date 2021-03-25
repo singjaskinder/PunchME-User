@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:punchme/apis/auth.dart';
 import 'package:punchme/overlays/snackbar.dart';
 
-class ForgotPasswordCtrller extends GetxController {
+class ForgotPasswordController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final emailCtrl = TextEditingController();
   final showProgress = false.obs;

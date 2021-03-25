@@ -9,13 +9,23 @@ import 'package:punchme/routes/routes.dart';
 import 'package:punchme/utils/date_time.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class RegisterCtrller extends GetxController {
+class RegisterController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
   final password2Ctrl = TextEditingController();
   AuthRepo authRepo = AuthApis();
   final isLoading = false.obs;
+  final showPassword = false.obs;
+  final showConfirmPassword = false.obs;
+
+  void togglePassword(bool isConfirmPassword) {
+    if (isConfirmPassword) {
+      showConfirmPassword.value = showConfirmPassword.value ? false : true;
+    } else {
+      showPassword.value = showPassword.value ? false : true;
+    }
+  }
 
   void register() async {
     if (formKey.currentState.validate()) {
@@ -50,9 +60,20 @@ class RegisterCtrller extends GetxController {
     try {
       JxSnackBarLoading(true);
       final userCred = await authRepo.googleLogin();
-      await createUserDetails(userCred);
-      JxSnackBarLoading(false);
-      Get.offAllNamed(Routes.phone);
+      if (userCred.additionalUserInfo.isNewUser) {
+        await createUserDetails(userCred);
+      } else {
+        final userM = await authRepo.getUserDetails();
+        final saver = await SharedPreferences.getInstance();
+        saver.setString('id', userM.id);
+        saver.setString('token', userM.token);
+        saver.setString('image', userM.image);
+        saver.setString('email', userM.email);
+        saver.setString('name', userM.name);
+        saver.setString('phone', userM.phone);
+        JxSnackBarLoading(false);
+        Get.offAllNamed(userM.phone == null ? Routes.phone : Routes.pager);
+      }
     } catch (e) {
       print(e);
       JxSnackBarLoading(isLoading.value);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:punchme/common/text.dart';
 import 'package:punchme/res/app_styles.dart';
 
 class SnapshotEmpty extends StatelessWidget {
@@ -8,8 +9,12 @@ class SnapshotEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child:
-            Text(text, textAlign: TextAlign.center, style: AppStyles.idleTxt));
+      child: JxText(
+        text,
+        size: 5,
+        isCenter: true,
+      ),
+    );
   }
 }
 
